@@ -237,7 +237,9 @@ export default function RegisterForm() {
       <button
         type="submit"
         disabled={loading}
-        className={`w-full bg-blue-${loading ? '4' : '6'}  hover:bg-blue-${loading ? '4' : '7'} text-white font-medium py-2 px-4 rounded-md transition duration-${loading ? '15' : '2'} transition-colors`}
+        className={`w-full ${
+          loading ? 'bg-blue-400' : 'bg-blue-600'
+        } hover:${loading ? 'bg-blue-400' : 'bg-blue-700'} text-white font-medium py-2 px-4 rounded-md transition-colors duration-200`}
       >
         {loading ? 'Registering...' : 'Register'}
       </button>
