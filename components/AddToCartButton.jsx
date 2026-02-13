@@ -1,9 +1,18 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
-export default function AddToCartButton({ productId }) {
+export default function AddToCartButton({ productId, slug }) {
+  const session = useSession();
+  const router = useRouter();
+  // console.log(session.data?.user?.email);
   const addToCart = async () => {
+    if (!session.data?.user) {
+      router.push(`/login?callbackUrl=/products/${slug}`);
+      return;
+    }
     const res = await fetch('/api/cart/add', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

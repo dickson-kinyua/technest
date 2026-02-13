@@ -1,10 +1,10 @@
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import GitHubProvider from 'next-auth/providers/github';
+import CredentialsProvider from 'next-auth/providers/credentials';
 import { connectDB } from '../../../../lib/db';
 import User from '../../../../models/User';
 import { toast } from 'react-toastify';
-import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 
 // Export authOptions separately

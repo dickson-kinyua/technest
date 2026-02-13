@@ -64,11 +64,25 @@ export async function POST(req) {
 /* =========================
    GET PRODUCTS (GET)
 ========================= */
-export async function GET() {
+export async function GET(request) {
   try {
     await connectDB();
 
-    const products = await Product.find().sort({ createdAt: -1 });
+    const { searchParams } = new URL(request.url);
+    const search = searchParams.get('search');
+
+    let query = {};
+
+    if (search) {
+      query = {
+        $or: [
+          { title: { $regex: search, $options: 'i' } },
+          { description: { $regex: search, $options: 'i' } },
+        ],
+      };
+    }
+
+    const products = await Product.find(query).sort({ createdAt: -1 });
 
     return NextResponse.json(products, { status: 200 });
   } catch (error) {

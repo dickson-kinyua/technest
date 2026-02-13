@@ -1,50 +1,35 @@
 'use client';
 
-import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
-export default function SearchBar({ onResults }) {
-  const [query, setQuery] = useState('');
-  const [loading, setLoading] = useState(false);
+export default function SearchBar() {
+  const router = useRouter();
+  const [search, setSearch] = useState('');
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!query.trim()) return;
+  // Debounce logic
+  useEffect(() => {
+    const cleanedSearch = search.trim();
 
-    setLoading(true);
+    const timer = setTimeout(() => {
+      if (!cleanedSearch) {
+        router.push('/products');
+      } else {
+        router.push(`/products?search=${encodeURIComponent(cleanedSearch)}`);
+      }
+    }, 2000); // 2 seconds
 
-    try {
-      const res = await fetch(
-        `/api/products/search?search=${encodeURIComponent(query)}`
-      );
-      const data = await res.json();
-      onResults(data.products || []);
-    } catch (err) {
-      toast.error('Search failed');
-    } finally {
-      setLoading(false);
-    }
-  };
+    // Cleanup function
+    return () => clearTimeout(timer);
+  }, [router, search]);
 
   return (
-    <form
-      onSubmit={handleSearch}
-      className="fixed top-0 m-1 z-50 flex flex-row justify-between bg-white rounded-3xl"
-    >
-      <input
-        type="text"
-        placeholder="Search products..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="flex-1 px-4 py-2 border rounded-l-lg  focus:outline-none focus:ring focus:border-blue-500 truncate"
-      />
-      <button
-        type="submit"
-        className="px-4 py-2 bg-blue-900 text-white rounded-r-lg hover:bg-blue-700"
-        disabled={loading}
-      >
-        {loading ? '...' : 'Search'}
-      </button>
-    </form>
+    <input
+      type="text"
+      placeholder="I am looking for..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      className="border px-3 py-2 w-full block rounded-xl"
+    />
   );
 }

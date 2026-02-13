@@ -5,35 +5,40 @@ import { connectDB } from '../../../../lib/db';
 import Product from '@/models/Product';
 import AddToCartButton from '../../../../components/AddToCartButton';
 import Link from 'next/link';
+import Details from '../../../../components/Details';
+import Reviews from '../../../../components/Reviews';
+import ProductTabs from '../../../../components/ProductTabs'; // 👈 import tabs
 
 export default async function ProductDetails({ params }) {
   const { slug } = await params;
   await connectDB();
 
-  let product = await Product.findOne({ slug: slug }).lean();
+  let product = await Product.findOne({ slug }).lean();
 
   if (!product) {
     notFound();
   }
 
-  // Convert any remaining non-serializable fields
   product = JSON.parse(JSON.stringify(product));
 
+  // Define tabs and pass product to components
+  const tabs = [
+    { name: 'Details', component: <Details product={product} /> },
+    { name: 'Reviews', component: <Reviews productId={product._id} /> },
+  ];
+
   return (
-    <div className="relative w-full mx-auto p-6">
-      <Link
+    <div className="relative w-full my-14 mx-auto p-6">
+      {/* <Link
         href="/"
         className="ml-2 w-full sticky top-0 flex flex-row gap-1 mb-5 text-blue-600 underline"
       >
         <FaArrowLeft size={20} />
         <p>Back</p>
-      </Link>
-      <h2 className="block p-2 bg-gray-50 sticky top-0">
-        Product details page
-      </h2>
+      </Link> */}
 
       {product.images && product.images.length > 0 && (
-        <div className="grid grid-cols-2 gap-4 mt-6">
+        <div className="grid grid-cols-2 gap-4">
           {product.images.map((img, index) => (
             <Image
               key={index}
@@ -53,11 +58,10 @@ export default async function ProductDetails({ params }) {
       </p>
       <p>{product.stock} units available</p>
 
-      <div className="text-gray-600 mt-2 block h-52 border border-gray-300 overflow-y-scroll p-3">
-        {product.description}
-      </div>
+      <AddToCartButton productId={product._id.toString()} slug={product.slug} />
 
-      <AddToCartButton productId={product._id} />
+      {/* Tabs Component */}
+      <ProductTabs tabs={tabs} />
     </div>
   );
 }

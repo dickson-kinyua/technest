@@ -12,29 +12,19 @@ export default function LoginPage() {
   const callbackUrl = searchParams.get('callbackUrl') || '/';
 
   return (
-    <div className="flex flex-col items-center bg-gray-50 min-h-screen">
+    <div className="flex flex-col items-center bg-gray-50 ">
       <div className="p-2 self-start bg-blue-700 text-white w-full">
         <Link href="/" className="flex flex-row gap-1 items-center mb-5">
           <FaArrowLeft size={20} />
-          <p className="underline">back</p>
+          <p className="underline">Back</p>
         </Link>
-        <p className="font-bold text-xl">
-          Sign in to your <br /> Account
-        </p>
+        <p className="font-bold text-xl">Sign in to your Account</p>
       </div>
 
-      {/* LoginForm handles routing itself after login */}
-      <LoginForm />
+      <LoginForm callbackUrl={callbackUrl} />
 
       <p className="mt-4 text-gray-600">Or continue with</p>
       <SocialLoginButtons />
-
-      <div className="flex flex-row gap-0.5 mt-14">
-        <p>Don't have an account? </p>
-        <Link href="/register" className="underline">
-          Register
-        </Link>
-      </div>
     </div>
   );
 }

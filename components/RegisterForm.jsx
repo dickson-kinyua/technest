@@ -1,82 +1,3 @@
-// 'use client';
-
-// import { useState } from 'react';
-// import { toast } from 'react-toastify';
-
-// export default function RegisterForm({ onRegister }) {
-//   const [name, setName] = useState('');
-//   const [email, setEmail] = useState('');
-//   const [password, setPassword] = useState('');
-//   const [loading, setLoading] = useState(false);
-
-//   const handleRegister = async (e) => {
-//     e.preventDefault();
-//     setLoading(true);
-
-//     try {
-//       const res = await fetch('/api/auth/register', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ name, email, password }),
-//       });
-
-//       const data = await res.json();
-//       if (!res.ok) throw new Error(data.message);
-
-//       onRegister(); // call parent to update login state
-//       toast.success('Registered successfully! Logged in.');
-//     } catch (err) {
-//       toast.error(err.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <form
-//       onSubmit={handleRegister}
-//       className="p-2 bg-white rounded-lg shadow-md"
-//     >
-//       {/* <h2 className="text-2xl font-bold mb-4">Register</h2> */}
-
-//       <input
-//         type="text"
-//         placeholder="Name"
-//         value={name}
-//         onChange={(e) => setName(e.target.value)}
-//         className="w-full mb-4 p-3 border rounded"
-//         required
-//       />
-
-//       <input
-//         type="email"
-//         placeholder="Email"
-//         value={email}
-//         onChange={(e) => setEmail(e.target.value)}
-//         className="w-full mb-4 p-3 border rounded"
-//         required
-//       />
-
-//       <input
-//         type="password"
-//         placeholder="Password"
-//         value={password}
-//         onChange={(e) => setPassword(e.target.value)}
-//         className="w-full mb-4 p-3 border rounded"
-//         required
-//       />
-
-//       <button
-//         type="submit"
-//         disabled={loading}
-//         className="w-full py-3 rounded-lg bg-blue-700 text-white font-semibold hover:bg-blue-600 disabled:opacity-50"
-//       >
-//         {loading ? 'Registering...' : 'Register'}
-//       </button>
-//     </form>
-//   );
-// }
-
 'use client';
 
 import { useState } from 'react';
@@ -92,14 +13,11 @@ export default function RegisterForm() {
     password: '',
     confirmPassword: '',
   });
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -114,8 +32,7 @@ export default function RegisterForm() {
     setLoading(true);
 
     try {
-      // Register API call
-      const response = await fetch('/api/auth/register', {
+      const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -125,15 +42,16 @@ export default function RegisterForm() {
         }),
       });
 
-      const data = await response.json();
+      const data = await res.json();
 
-      if (!response.ok) {
-        toast.error(data.message || 'Registration failed');
+      if (!res.ok) {
         setError(data.message || 'Registration failed');
+        toast.error(data.message || 'Registration failed');
+        setLoading(false);
         return;
       }
 
-      // Auto login after successful registration
+      // Auto login after registration
       const result = await signIn('credentials', {
         email: formData.email,
         password: formData.password,
@@ -142,104 +60,65 @@ export default function RegisterForm() {
 
       if (result?.error) {
         setError(result.error);
+        toast.error(result.error);
       } else {
         router.push('/');
         router.refresh();
       }
-    } catch (error) {
-      console.error('Registration error:', error);
-      setError(error.message);
-    } finally {
-      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setError('An unexpected error occurred');
+      toast.error('An unexpected error occurred');
     }
+
+    setLoading(false);
   };
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4 px-3">
-      <div>
-        <label
-          htmlFor="name"
-          className="block text-sm font-medium text-gray-700 mb-1"
-        >
-          Name
-        </label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          required
-        />
-      </div>
+      {error && <div className="text-red-600">{error}</div>}
 
-      <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium text-gray-700 mb-1"
-        >
-          Email
-        </label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          required
-        />
-      </div>
-
-      <div>
-        <label
-          htmlFor="password"
-          className="block text-sm font-medium text-gray-700 mb-1"
-        >
-          Password
-        </label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          required
-        />
-      </div>
-
-      <div>
-        <label
-          htmlFor="confirmPassword"
-          className="block text-sm font-medium text-gray-700 mb-1"
-        >
-          Confirm Password
-        </label>
-        <input
-          type="password"
-          id="confirmPassword"
-          name="confirmPassword"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          required
-        />
-      </div>
-
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-          {error}
-        </div>
-      )}
+      <input
+        type="text"
+        name="name"
+        placeholder="Name"
+        value={formData.name}
+        onChange={handleChange}
+        required
+        className="w-full px-3 py-2 border rounded"
+      />
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        value={formData.email}
+        onChange={handleChange}
+        required
+        className="w-full px-3 py-2 border rounded"
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        value={formData.password}
+        onChange={handleChange}
+        required
+        className="w-full px-3 py-2 border rounded"
+      />
+      <input
+        type="password"
+        name="confirmPassword"
+        placeholder="Confirm Password"
+        value={formData.confirmPassword}
+        onChange={handleChange}
+        required
+        className="w-full px-3 py-2 border rounded"
+      />
 
       <button
         type="submit"
         disabled={loading}
-        className={`w-full ${
-          loading ? 'bg-blue-400' : 'bg-blue-600'
-        } hover:${loading ? 'bg-blue-400' : 'bg-blue-700'} text-white font-medium py-2 px-4 rounded-md transition-colors duration-200`}
+        className="w-full py-2 bg-blue-600 text-white rounded disabled:opacity-50"
       >
         {loading ? 'Registering...' : 'Register'}
       </button>

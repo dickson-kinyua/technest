@@ -2,6 +2,8 @@
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import Footer from '@/components/Footer';
+import Header from '@/components/Header';
+// import SearchBar from '@/components/SearchBar';
 
 // React-Toastify
 import { ToastContainer } from 'react-toastify';
@@ -38,6 +40,7 @@ export default function RootLayout({ children }) {
       >
         {/* Wrap with SessionProvider */}
         <SessionProviderWrapper>
+          <Header />
           {children}
           <Footer />
 
