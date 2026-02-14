@@ -13,7 +13,7 @@ export default function SearchBar() {
 
     const timer = setTimeout(() => {
       if (!cleanedSearch) {
-        router.push('/products');
+        return; // Don't navigate if search is empty
       } else {
         router.push(`/products?search=${encodeURIComponent(cleanedSearch)}`);
       }
@@ -29,7 +29,7 @@ export default function SearchBar() {
       placeholder="I am looking for..."
       value={search}
       onChange={(e) => setSearch(e.target.value)}
-      className="border px-3 py-2 w-full block rounded-xl"
+      className="border border-gray-300   px-3 py-2 w-full block rounded-xl"
     />
   );
 }

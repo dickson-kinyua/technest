@@ -3,20 +3,23 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import { usePathname } from 'next/navigation';
 
-export default function MenuBar() {
+export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathName = usePathname();
 
   const links = [
     { name: 'Home', href: '/' },
     { name: 'Products', href: '/products' },
-    { name: 'Categories', href: '/categories' },
+    { name: 'Cart', href: '/cart' },
     { name: 'About', href: '/about' },
     { name: 'Contact', href: '/contact' },
+    { name: 'Account', href: '/account' },
   ];
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-40">
+    <nav className="bg-gray-50 shadow-md sticky top-0 w-full z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
         {/* Logo */}
         <Link href="/" className="text-2xl font-bold text-blue-700">
@@ -29,7 +32,7 @@ export default function MenuBar() {
             <Link
               key={link.name}
               href={link.href}
-              className="text-gray-700 hover:text-blue-700 font-medium"
+              className={`${pathName === link.href ? 'text-blue-700 underline' : 'text-gray-700'} hover:text-blue-700 font-medium`}
             >
               {link.name}
             </Link>

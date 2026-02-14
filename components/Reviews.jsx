@@ -55,7 +55,7 @@ export default function Reviews({ productId }) {
 
       {/* Reviews List */}
       {reviews.map((r) => (
-        <div key={r._id} className="border p-3 rounded bg-white">
+        <div key={r._id} className="shadow-2xl p-3 rounded bg-white">
           <div className="flex justify-between items-center mb-1">
             <span className="font-semibold">{r.user?.name || 'Anonymous'}</span>
             <span className="text-amber-400">{'★'.repeat(r.rating)}</span>

@@ -1,4 +1,4 @@
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { connectDB } from '../../../../lib/db';
@@ -28,7 +28,7 @@ export default async function ProductDetails({ params }) {
   ];
 
   return (
-    <div className="relative w-full my-14 mx-auto p-6">
+    <div className="relative w-full mb-14 mx-auto p-6">
       {/* <Link
         href="/"
         className="ml-2 w-full sticky top-0 flex flex-row gap-1 mb-5 text-blue-600 underline"
@@ -59,6 +59,13 @@ export default async function ProductDetails({ params }) {
       <p>{product.stock} units available</p>
 
       <AddToCartButton productId={product._id.toString()} slug={product.slug} />
+      <Link
+        href="/products"
+        className=" w-full flex flex-row items-center gap-1 mt-5 text-blue-600 underline"
+      >
+        <p>Continue shopping</p>
+        <FaArrowRight size={20} />
+      </Link>
 
       {/* Tabs Component */}
       <ProductTabs tabs={tabs} />

@@ -6,6 +6,7 @@ import Product from '../../../models/Product';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import CheckoutButton from '../../../components/CheckOutButton';
 
 export default async function CartPage() {
   // Get session using NextAuth instead of custom getCurrentUser
@@ -159,9 +160,7 @@ export default async function CartPage() {
                 </div>
               </div>
 
-              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-md transition duration-200 mb-4">
-                Proceed to Checkout
-              </button>
+              <CheckoutButton />
 
               <Link
                 href="/products"
