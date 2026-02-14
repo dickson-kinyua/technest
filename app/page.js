@@ -4,7 +4,7 @@ import Link from 'next/link';
 import SearchBar from '@/components/SearchBar';
 
 async function getProducts() {
-  const res = await fetch(`/api/products`, {
+  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/products`, {
     cache: 'no-store',
   });
 
