@@ -1,30 +1,23 @@
-'use client';
-
-import { useRouter, useSearchParams } from 'next/navigation';
-import LoginForm from '../../../components/LoginForm';
-import SocialLoginButtons from '../../../components/SocialLoginButtons';
-import Link from 'next/link';
-import { FaArrowLeft } from 'react-icons/fa';
+import { Suspense } from 'react';
+import LoginPageClient from './LoginPageClient';
 
 export default function LoginPage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/';
-
   return (
-    <div className="flex flex-col items-center bg-gray-50 ">
-      <div className="p-2 self-start bg-blue-700 text-white w-full">
-        <Link href="/" className="flex flex-row gap-1 items-center mb-5">
-          <FaArrowLeft size={20} />
-          <p className="underline">Back</p>
-        </Link>
-        <p className="font-bold text-xl">Sign in to your Account</p>
-      </div>
-
-      <LoginForm callbackUrl={callbackUrl} />
-
-      <p className="mt-4 text-gray-600">Or continue with</p>
-      <SocialLoginButtons />
-    </div>
+    <Suspense
+      fallback={
+        <div className="flex flex-col items-center bg-gray-50">
+          <div className="p-2 self-start bg-blue-700 text-white w-full">
+            <div className="flex flex-row gap-1 items-center mb-5">
+              <div className="w-5 h-5" /> {/* Placeholder for arrow */}
+              <p className="underline">Back</p>
+            </div>
+            <p className="font-bold text-xl">Sign in to your Account</p>
+          </div>
+          <div className="mt-8">Loading...</div>
+        </div>
+      }
+    >
+      <LoginPageClient />
+    </Suspense>
   );
 }
