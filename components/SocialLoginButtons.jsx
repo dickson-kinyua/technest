@@ -3,14 +3,10 @@
 import { signIn } from 'next-auth/react';
 import { FaGithub, FaGoogle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
-export default function SocialLoginButtons() {
-  const searchParams = useSearchParams();
+export default function SocialLoginButtons({ callbackUrl = '/' }) {
   const router = useRouter();
-
-  // Get callback URL from query params, default to '/'
-  const callbackUrl = searchParams.get('callbackUrl') || '/';
 
   const handleSocialLogin = async (provider) => {
     try {

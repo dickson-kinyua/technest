@@ -24,7 +24,7 @@ export default function LoginPageClient() {
       <LoginForm callbackUrl={callbackUrl} />
 
       <p className="mt-4 text-gray-600">Or continue with</p>
-      <SocialLoginButtons />
+      <SocialLoginButtons callbackUrl={callbackUrl} />
     </div>
   );
 }
