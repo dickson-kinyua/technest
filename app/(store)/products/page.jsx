@@ -1,14 +1,27 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { connectDB } from '@/lib/db';
+import Product from '@/models/Product';
+
+// async function getProducts(search) {
+//   const res = await fetch(
+//     `${process.env.NEXTAUTH_URL}/api/products?search=${search || ''}`,
+//     {
+//       cache: 'no-store',
+//     }
+//   );
+
+//   if (!res.ok) throw new Error('Failed to fetch products');
+
+//   return res.json();
+// }
 
 async function getProducts(search) {
-  const res = await fetch(`/api/products?search=${search || ''}`, {
-    cache: 'no-store',
-  });
+  await connectDB();
 
-  if (!res.ok) throw new Error('Failed to fetch products');
+  const query = search ? { title: { $regex: search, $options: 'i' } } : {};
 
-  return res.json();
+  return await Product.find(query).lean();
 }
 
 export default async function ProductsPage({ searchParams }) {

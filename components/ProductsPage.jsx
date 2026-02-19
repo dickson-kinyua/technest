@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 async function getProducts() {
-  const res = await fetch('/api/products', {
+  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/products`, {
     cache: 'no-store',
   });
 
