@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import Input from './ui/Input';
 
 export default function LoginForm({ callbackUrl = '/' }) {
   const router = useRouter();
@@ -41,33 +42,34 @@ export default function LoginForm({ callbackUrl = '/' }) {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full mt-3 max-w-md space-y-4 px-3"
-    >
+    <form onSubmit={handleSubmit} className="w-full mt-3 space-y-4">
       {error && <div className="text-red-600">{error}</div>}
-      <input
+      <Input
         type="email"
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
-        className="w-full px-3 py-2 border rounded"
       />
-      <input
+      <Input
         type="password"
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         required
-        className="w-full px-3 py-2 border rounded"
       />
       <button
         type="submit"
-        disabled={loading}
-        className="w-full py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+        disabled={loading || !email || !password}
+        className="w-full py-2.5 rounded-lg 
+           bg-teal-500 text-white font-semibold 
+           shadow-sm 
+           hover:bg-teal-600 hover:shadow-md 
+           focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 
+           transition-all duration-200 
+           disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? 'Logging in...' : 'Login'}
+        {loading ? 'Signing in...' : 'Sign In'}
       </button>
     </form>
   );

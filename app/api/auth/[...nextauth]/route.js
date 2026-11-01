@@ -39,7 +39,7 @@ export const authOptions = {
 
           if (!isValid) {
             toast.error('Invalid password');
-            // throw new Error('Invalid password');
+            throw new Error('Invalid password');
           }
 
           // Return user object

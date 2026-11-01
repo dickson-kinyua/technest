@@ -36,21 +36,19 @@ export default function SocialLoginButtons({ callbackUrl = '/' }) {
   };
 
   return (
-    <div className="flex gap-4 mt-4">
+    <div className="flex gap-4 mt-4 justify-center">
       <button
         onClick={() => handleSocialLogin('google')}
-        className="px-4 flex flex-row gap-1 items-center py-2 bg-red-600 text-white rounded hover:bg-red-700"
+        className="cursor-pointer px-4 flex flex-row gap-1 items-center py-2 text-red-600  rounded hover:scale-105 transition-transform hover:bg-gray-200    "
       >
-        <FaGoogle />
-        Google
+        <FaGoogle size={32} />
       </button>
 
       <button
         onClick={() => handleSocialLogin('github')}
-        className="px-4 flex flex-row gap-1 items-center py-2 bg-gray-800 text-white rounded hover:bg-gray-900"
+        className="cursor-pointer px-4 flex flex-row gap-1 items-center py-2 text-gray-600 rounded hover:scale-105 transition-transform hover:bg-gray-200  "
       >
-        <FaGithub />
-        GitHub
+        <FaGithub size={32} />
       </button>
     </div>
   );

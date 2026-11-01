@@ -29,7 +29,7 @@ export default function AddToCartButton({ productId, slug }) {
   return (
     <button
       onClick={addToCart}
-      className="bg-blue-700 mt-2 text-white px-4 py-2 rounded"
+      className="bg-teal-500 uppercase lg:w-1/4 cursor-pointer hover:bg-teal-600 tracking-wide mt-2 text-white px-4 py-2 rounded"
     >
       Add to Cart
     </button>

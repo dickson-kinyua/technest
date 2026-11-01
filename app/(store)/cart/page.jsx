@@ -7,6 +7,8 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import CheckoutButton from '../../../components/CheckOutButton';
+import { NextResponse } from 'next/server';
+import RemoveFromCartButton from '../../../components/RemoveFromCartButton';
 
 export default async function CartPage() {
   // Get session using NextAuth instead of custom getCurrentUser
@@ -120,9 +122,7 @@ export default async function CartPage() {
                       <p className="font-medium text-gray-900">
                         ${(item.product.price * item.quantity).toFixed(2)}
                       </p>
-                      <button className="mt-2 text-sm text-red-600 hover:text-red-800 transition duration-200">
-                        Remove
-                      </button>
+                      <RemoveFromCartButton productId={item._id.toString()} />
                     </div>
                   </div>
                 </div>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import Input from './ui/Input';
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -78,49 +79,73 @@ export default function RegisterForm() {
     <form onSubmit={handleSubmit} className="w-full max-w-md space-y-4 px-3">
       {error && <div className="text-red-600">{error}</div>}
 
-      <input
+      <Input
         type="text"
         name="name"
         placeholder="Name"
         value={formData.name}
         onChange={handleChange}
         required
-        className="w-full px-3 py-2 border rounded"
+        className="w-full px-4 py-2.5 rounded-lg 
+           border border-gray-200 
+           shadow-sm 
+           focus:outline-none focus:ring-2 focus:ring-blue-500 
+           transition"
       />
-      <input
+      <Input
         type="email"
         name="email"
         placeholder="Email"
         value={formData.email}
         onChange={handleChange}
         required
-        className="w-full px-3 py-2 border rounded"
+        className="w-full px-4 py-2.5 rounded-lg 
+           border border-gray-200 
+           shadow-sm 
+           focus:outline-none focus:ring-2 focus:ring-blue-500 
+           transition"
       />
-      <input
+      <Input
         type="password"
         name="password"
         placeholder="Password"
         value={formData.password}
         onChange={handleChange}
         required
-        className="w-full px-3 py-2 border rounded"
+        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 
+           shadow-sm 
+           focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
       />
-      <input
+      <Input
         type="password"
         name="confirmPassword"
         placeholder="Confirm Password"
         value={formData.confirmPassword}
         onChange={handleChange}
         required
-        className="w-full px-3 py-2 border rounded"
+        className="w-full px-4 py-2.5 rounded-lg border border-gray-200 
+           shadow-sm 
+           focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
       />
 
       <button
         type="submit"
-        disabled={loading}
-        className="w-full py-2 bg-blue-600 text-white rounded disabled:opacity-50"
+        disabled={
+          loading ||
+          !formData.name ||
+          !formData.email ||
+          !formData.password ||
+          !formData.confirmPassword
+        }
+        className="w-full py-2.5 rounded-lg 
+           bg-teal-500 text-white font-semibold 
+           shadow-sm 
+           hover:bg-teal-600 hover:shadow-md 
+           focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 
+           transition-all duration-200 
+           disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {loading ? 'Registering...' : 'Register'}
+        {loading ? 'Creating account...' : 'Create Account'}
       </button>
     </form>
   );
