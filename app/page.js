@@ -9,10 +9,28 @@ import Ads from '@/components/Ads';
 import CopyRightSection from '@/components/CopyRightSection';
 
 export default async function Home() {
-  await connectDB();
-  const products = await Product.find({});
-  const reviews = await Review.find({});
-  console.log(reviews);
+  let products = [];
+  let reviews = [];
+
+  try {
+    console.log('Connecting to MongoDB...');
+
+    await connectDB();
+
+    console.log('Fetching products...');
+
+    products = await Product.find({}).lean();
+
+    console.log('Fetching reviews...');
+
+    reviews = await Review.find({}).lean();
+
+    console.log('Products:', products.length);
+    console.log('Reviews:', reviews.length);
+  } catch (error) {
+    console.error('HOMEPAGE DATABASE ERROR:', error);
+    throw error;
+  }
 
   return (
     <div className=" bg-gray-50 w-full grid grid-cols-1 px-2 sm:px-6 lg:px-8">
