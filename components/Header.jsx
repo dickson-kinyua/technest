@@ -80,7 +80,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-slate-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="h-[76px] flex items-center justify-between">
+        <div className="h-19 flex items-center justify-between">
           {/* LOGO */}
           <Link
             href="/"

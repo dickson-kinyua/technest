@@ -1,41 +1,59 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '../../../lib/db';
 import Product from '../../../models/Product';
-import fs from 'fs';
-import path from 'path';
+// import fs from 'fs';
+// import path from 'path';
 import { generateSlug } from '../../../utils/slugify';
+import cloudinary from '@/lib/cloudinary';
 
+export const runtime = 'nodejs';
+
+//post a new product
 export async function POST(req) {
   try {
     const formData = await req.formData();
     const file = formData.get('image');
 
-    if (!file) return NextResponse.json({ error: 'No image' }, { status: 400 });
+    if (!file || file.size === 0) {
+      return NextResponse.json({ error: 'No image selected' }, { status: 400 });
+    }
 
-    // Convert to Buffer
+    // Convert image to Buffer
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Save locally
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads');
-    if (!fs.existsSync(uploadsDir))
-      fs.mkdirSync(uploadsDir, { recursive: true });
+    // Upload image to Cloudinary
+    const uploadResult = await new Promise((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream(
+          {
+            folder: 'technest/products',
+            resource_type: 'image',
+          },
+          (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(result);
+            }
+          }
+        )
+        .end(buffer);
+    });
 
-    const fileName = `${Date.now()}-${file.name}`;
-    const filePath = path.join(uploadsDir, fileName);
-    fs.writeFileSync(filePath, buffer);
-
-    const imageUrl = `/uploads/${fileName}`;
+    // Get Cloudinary image URL
+    const imageUrl = uploadResult.secure_url;
 
     await connectDB();
 
     // Generate slug from title
     const title = formData.get('title');
+
     let slugBase = generateSlug(title);
     let slug = slugBase;
     let count = 1;
 
-    // Ensure uniqueness
+    // Ensure slug uniqueness
     while (await Product.findOne({ slug })) {
       slug = `${slugBase}-${count++}`;
     }
@@ -51,9 +69,10 @@ export async function POST(req) {
       category: formData.get('category'),
     });
 
-    return NextResponse.json(product);
+    return NextResponse.json(product, { status: 201 });
   } catch (error) {
-    console.error(error);
+    console.error('PRODUCT UPLOAD ERROR:', error);
+
     return NextResponse.json(
       { error: 'Failed to create product' },
       { status: 500 }
