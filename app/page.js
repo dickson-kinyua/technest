@@ -2,35 +2,21 @@ import Header from '@/components/Header';
 import Image from 'next/image';
 import Link from 'next/link';
 import SearchBar from '@/components/SearchBar';
-import { connectDB } from '../lib/db';
-import Product from '@/models/Product';
-import Review from '@/models/Review';
-import Ads from '@/components/Ads';
+
 import CopyRightSection from '@/components/CopyRightSection';
 
+async function getProducts() {
+  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/products`, {
+    cache: 'no-store',
+  });
+
+  if (!res.ok) throw new Error('Failed to fetch products');
+
+  return res.json();
+}
+
 export default async function Home() {
-  let products = [];
-  let reviews = [];
-
-  try {
-    console.log('Connecting to MongoDB...');
-
-    await connectDB();
-
-    console.log('Fetching products...');
-
-    products = await Product.find({}).lean();
-
-    console.log('Fetching reviews...');
-
-    reviews = await Review.find({}).lean();
-
-    console.log('Products:', products.length);
-    console.log('Reviews:', reviews.length);
-  } catch (error) {
-    console.error('HOMEPAGE DATABASE ERROR:', error);
-    throw error;
-  }
+  const products = await getProducts();
 
   return (
     <div className=" bg-gray-50 w-full grid grid-cols-1 px-2 sm:px-6 lg:px-8">
