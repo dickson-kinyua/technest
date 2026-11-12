@@ -19,8 +19,11 @@ export async function POST(req) {
     }
 
     // Convert image to Buffer
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+
+    // reads the file's contents.
+    const bytes = await file.arrayBuffer(); // reads the file's contents.
+
+    const buffer = Buffer.from(bytes); //converts those contents into a Node.js Buffer
 
     // Upload image to Cloudinary
     const uploadResult = await new Promise((resolve, reject) => {
@@ -40,7 +43,7 @@ export async function POST(req) {
         )
         .end(buffer);
     });
-
+    console.log(uploadResult);
     // Get Cloudinary image URL
     const imageUrl = uploadResult.secure_url;
 
